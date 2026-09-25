@@ -47,7 +47,7 @@ fake_shelters = pd.DataFrame({
 # -------------------------------------------------------------
 # STEP 3: Build the Folium map
 # -------------------------------------------------------------
-m = folium.Map(location=ASSAM_CENTER, zoom_start=8, tiles="CartoDB positron")
+m = folium.Map(location=ASSAM_CENTER, zoom_start=8, tiles="OpenStreetMap")
 
 # Mark Assam's rough center
 folium.Marker(
@@ -66,13 +66,17 @@ for _, row in fake_shelters.iterrows():
 
 # A placeholder "risk zone" circle - this is where your real
 # flood-risk GeoJSON polygon will go in Week 2-3
+# Circle radius now grows with the rainfall scenario slider
+base_radius = 8000
+scenario_radius = base_radius * (1 + rainfall_increase / 100)
+
 folium.Circle(
     location=[26.15, 92.95],
-    radius=8000,
+    radius=scenario_radius,
     color="red",
     fill=True,
     fill_opacity=0.2,
-    popup="Placeholder flood risk zone",
+    popup=f"Placeholder flood risk zone ({rainfall_increase:+d}% scenario)",
 ).add_to(m)
 
 # -------------------------------------------------------------
